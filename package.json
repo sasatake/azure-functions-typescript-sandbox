@@ -6,8 +6,7 @@
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
     "prestart": "npm run build && func extensions install",
-    "start:host": "tsc && func start",
-    "start": "npm-run-all --parallel start:host watch",
+    "start:local": "tsc && func start --script-root src",
     "test": "echo \"No tests yet...\""
   },
   "description": "",
