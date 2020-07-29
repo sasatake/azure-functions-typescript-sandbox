@@ -18,19 +18,19 @@ stages:
       - job: 
         steps:
         - bash: |
-            npm install src/
+            npm install --prefix src/
             npm run build --if-present
             npm prune --production
         - task: ArchiveFiles@2
           inputs:
-            rootFolderOrFile: '$(Build.BinariesDirectory)/src/'
+            rootFolderOrFile: "$(System.DefaultWorkingDirectory)/src/"
             includeRootFolder: false
             archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            archiveFile: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
             replaceExistingArchive: true
         - task: PublishBuildArtifacts@1
           inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            PathtoPublish: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
 
@@ -43,7 +43,7 @@ stages:
             azureSubscription: 'sasatake-azure-service-connection'
             appType: 'functionApp'
             appName: '$(prefix)-functions'
-            package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+            package: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
             deploymentMethod: 'zipDeploy'
 
 
