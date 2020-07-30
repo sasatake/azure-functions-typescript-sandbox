@@ -24,8 +24,6 @@ local.settings.json
 
 node_modules
 dist
-src/**/*.js
-src/**/*.js.map
 
 # Local python packages
 .python_packages/
