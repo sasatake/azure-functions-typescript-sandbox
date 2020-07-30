@@ -8,6 +8,7 @@ trigger:
 
 variables:
   prefix: "$(Build.SourceBranchName)"
+  archiveName: 'FunctionsArchive'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -18,33 +19,38 @@ stages:
       - job: 
         steps:
         - bash: |
-            npm install --prefix src/
+            npm install
             npm run build --if-present
             npm prune --production
         - task: ArchiveFiles@2
           inputs:
-            rootFolderOrFile: "$(System.DefaultWorkingDirectory)/src/"
+            rootFolderOrFile: "$(Build.SourcesDirectory)"
             includeRootFolder: false
             archiveType: 'zip'
-            archiveFile: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
             replaceExistingArchive: true
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
+        # - task: PublishBuildArtifacts@1
+        #   inputs:
+        #     PathtoPublish: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
+        #     ArtifactName: '$(archiveName)'
+        #     publishLocation: 'Container'
 
   - stage: Deploy
+    dependsOn:
+      - Build
     jobs:
       - job: 
         steps:
-        - task: AzureFunctionApp@1
-          inputs:
-            azureSubscription: 'sasatake-azure-service-connection'
-            appType: 'functionApp'
-            appName: '$(prefix)-functions'
-            package: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
-            deploymentMethod: 'zipDeploy'
+          # - task: DownloadPipelineArtifact@2
+          #   inputs:
+          #     artifact: '$(archiveName)'
+          - task: AzureFunctionApp@1
+            inputs:
+              azureSubscription: 'sasatake-azure-service-connection'
+              appType: 'functionApp'
+              appName: '$(prefix)-functions'
+              package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              deploymentMethod: 'zipDeploy'
 
 
         
