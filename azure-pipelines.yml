@@ -19,6 +19,17 @@ stages:
       - job: 
         steps:
         - bash: |
+            echo "pwd: $(pwd)"
+            echo "Agent.HomeDirectory: ${AGENT_HOMEDIRECTORY}"
+            echo "Agent.BuildDirectory: ${AGENT_BUILDDIRECTORY}"
+            echo "Build.SourcesDirectory: ${BUILD_SOURCESDIRECTORY}"
+            echo "Build.ArtifactStagingDirectory: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
+            echo "Build.StagingDirectory: ${BUILD_STAGINGDIRECTORY}"
+            echo "Build.BinariesDirectory: ${BUILD_BINARIESDIRECTORY}"
+            echo "System.DefaultWorkingDirectory: ${SYSTEM_DEFAULTWORKINGDIRECTORY}"
+            echo "Pipeline.Workspace: ${PIPELINE_WORKSPACE}"
+          displayName: Debug
+        - bash: |
             npm install
             npm run build --if-present
             npm prune --production
@@ -29,11 +40,11 @@ stages:
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
             replaceExistingArchive: true
-        # - task: PublishBuildArtifacts@1
-        #   inputs:
-        #     PathtoPublish: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
-        #     ArtifactName: '$(archiveName)'
-        #     publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            ArtifactName: '$(archiveName)'
+            publishLocation: 'Container'
 
   - stage: Deploy
     dependsOn:
@@ -41,15 +52,26 @@ stages:
     jobs:
       - job: 
         steps:
-          # - task: DownloadPipelineArtifact@2
-          #   inputs:
-          #     artifact: '$(archiveName)'
+          - bash: |
+              echo "pwd: $(pwd)"
+              echo "Agent.HomeDirectory: ${AGENT_HOMEDIRECTORY}"
+              echo "Agent.BuildDirectory: ${AGENT_BUILDDIRECTORY}"
+              echo "Build.SourcesDirectory: ${BUILD_SOURCESDIRECTORY}"
+              echo "Build.ArtifactStagingDirectory: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
+              echo "Build.StagingDirectory: ${BUILD_STAGINGDIRECTORY}"
+              echo "Build.BinariesDirectory: ${BUILD_BINARIESDIRECTORY}"
+              echo "System.DefaultWorkingDirectory: ${SYSTEM_DEFAULTWORKINGDIRECTORY}"
+              echo "Pipeline.Workspace: ${PIPELINE_WORKSPACE}"
+            displayName: Debug
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: '$(archiveName)'
           - task: AzureFunctionApp@1
             inputs:
               azureSubscription: 'sasatake-azure-service-connection'
               appType: 'functionApp'
               appName: '$(prefix)-functions'
-              package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              package: '**/$(Build.BuildId).zip'
               deploymentMethod: 'zipDeploy'
 
 
