@@ -28,6 +28,8 @@ stages:
             echo "Build.BinariesDirectory: ${BUILD_BINARIESDIRECTORY}"
             echo "System.DefaultWorkingDirectory: ${SYSTEM_DEFAULTWORKINGDIRECTORY}"
             echo "Pipeline.Workspace: ${PIPELINE_WORKSPACE}"
+            node -v
+            npm -v
           displayName: Debug
         - bash: |
             npm install
