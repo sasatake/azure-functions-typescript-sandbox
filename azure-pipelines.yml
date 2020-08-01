@@ -33,6 +33,7 @@ stages:
             npm install
             npm run build --if-present
             npm prune --production
+            tree
         - task: ArchiveFiles@2
           inputs:
             rootFolderOrFile: "$(Build.SourcesDirectory)"
