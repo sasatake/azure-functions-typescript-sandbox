@@ -40,11 +40,10 @@ stages:
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
             replaceExistingArchive: true
-        - task: PublishBuildArtifacts@1
+        - task: PublishPipelineArtifact@1
           inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
             ArtifactName: '$(archiveName)'
-            publishLocation: 'Container'
 
   - stage: Deploy
     dependsOn:
@@ -65,13 +64,15 @@ stages:
             displayName: Debug
           - task: DownloadPipelineArtifact@2
             inputs:
+              buildType: 'current'
               artifact: '$(archiveName)'
+              path: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
           - task: AzureFunctionApp@1
             inputs:
               azureSubscription: 'sasatake-azure-service-connection'
               appType: 'functionApp'
               appName: '$(prefix)-functions'
-              package: '**/$(Build.BuildId).zip'
+              package: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
               deploymentMethod: 'zipDeploy'
 
 
