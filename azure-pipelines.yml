@@ -12,12 +12,18 @@ variables:
 
 pool:
   vmImage: 'ubuntu-latest'
+  demands: |
+    'node'
+    'npm'
 
 stages:
   - stage: Build
     jobs:
       - job: 
         steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '12.x'
         - bash: |
             echo "pwd: $(pwd)"
             echo "Agent.HomeDirectory: ${AGENT_HOMEDIRECTORY}"
@@ -35,18 +41,26 @@ stages:
             npm install
             npm run build --if-present
             npm prune --production
-            ls *
-            ls node_modules/
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: "$(Build.SourcesDirectory)"
+            Contents: |
+              host.json
+              package.json
+              **/node_modules/**
+              **/**/function.json
+              **/**/index.js
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
         - task: ArchiveFiles@2
           inputs:
-            rootFolderOrFile: "$(Build.SourcesDirectory)"
+            rootFolderOrFile: "$(Build.ArtifactStagingDirectory)"
             includeRootFolder: false
             archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            archiveFile: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
             replaceExistingArchive: true
         - task: PublishPipelineArtifact@1
           inputs:
-            targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            targetPath: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
             ArtifactName: '$(archiveName)'
 
   - stage: Deploy
@@ -65,6 +79,8 @@ stages:
               echo "Build.BinariesDirectory: ${BUILD_BINARIESDIRECTORY}"
               echo "System.DefaultWorkingDirectory: ${SYSTEM_DEFAULTWORKINGDIRECTORY}"
               echo "Pipeline.Workspace: ${PIPELINE_WORKSPACE}"
+              node -v
+              npm -v  
             displayName: Debug
           - task: DownloadPipelineArtifact@2
             inputs:
