@@ -90,7 +90,7 @@ stages:
               appType: 'functionApp'
               appName: '$(prefix)-functions'
               package: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
-              deploymentMethod: 'zipDeploy'
+              deploymentMethod: 'auto'
 
 
         
