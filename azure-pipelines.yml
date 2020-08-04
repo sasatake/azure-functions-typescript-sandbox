@@ -12,9 +12,9 @@ variables:
 
 pool:
   vmImage: 'ubuntu-latest'
-  demands: |
-    'node'
-    'npm'
+  demands:
+    - 'node'
+    - 'npm'
 
 stages:
   - stage: Build
