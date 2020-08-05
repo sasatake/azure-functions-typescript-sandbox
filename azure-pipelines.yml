@@ -85,15 +85,14 @@ stages:
             inputs:
               buildType: 'current'
               artifact: '$(archiveName)'
-              path: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
-          - task: AzureCLI@2
+              path: '$(Build.BinariesDirectory)/'
+          - task: AzureFunctionApp@1
             inputs:
               azureSubscription: 'sasatake-azure-service-connection'
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az functionapp deployment source config-zip --src ${1} --name ${2} --resource-group ${3}
-              arguments: "$(Build.BinariesDirectory)/$(Build.BuildId).zip $(functionName) $(resourceGroupName)"
+              appType: 'functionApp'
+              appName: '$(prefix)-functions'
+              package: '$(Build.BinariesDirectory)/$(Build.BuildId).zip'
+              deploymentMethod: 'auto'
 
 
         
