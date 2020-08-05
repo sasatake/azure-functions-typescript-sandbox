@@ -24,19 +24,6 @@ stages:
           inputs:
             versionSpec: '12.x'
         - bash: |
-            echo "pwd: $(pwd)"
-            echo "Agent.HomeDirectory: ${AGENT_HOMEDIRECTORY}"
-            echo "Agent.BuildDirectory: ${AGENT_BUILDDIRECTORY}"
-            echo "Build.SourcesDirectory: ${BUILD_SOURCESDIRECTORY}"
-            echo "Build.ArtifactStagingDirectory: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
-            echo "Build.StagingDirectory: ${BUILD_STAGINGDIRECTORY}"
-            echo "Build.BinariesDirectory: ${BUILD_BINARIESDIRECTORY}"
-            echo "System.DefaultWorkingDirectory: ${SYSTEM_DEFAULTWORKINGDIRECTORY}"
-            echo "Pipeline.Workspace: ${PIPELINE_WORKSPACE}"
-            node -v
-            npm -v
-          displayName: Debug
-        - bash: |
             npm install
             npm run build --if-present
             npm prune --production
@@ -68,19 +55,6 @@ stages:
     jobs:
       - job: 
         steps:
-          - bash: |
-              echo "pwd: $(pwd)"
-              echo "Agent.HomeDirectory: ${AGENT_HOMEDIRECTORY}"
-              echo "Agent.BuildDirectory: ${AGENT_BUILDDIRECTORY}"
-              echo "Build.SourcesDirectory: ${BUILD_SOURCESDIRECTORY}"
-              echo "Build.ArtifactStagingDirectory: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
-              echo "Build.StagingDirectory: ${BUILD_STAGINGDIRECTORY}"
-              echo "Build.BinariesDirectory: ${BUILD_BINARIESDIRECTORY}"
-              echo "System.DefaultWorkingDirectory: ${SYSTEM_DEFAULTWORKINGDIRECTORY}"
-              echo "Pipeline.Workspace: ${PIPELINE_WORKSPACE}"
-              node -v
-              npm -v  
-            displayName: Debug
           - task: DownloadPipelineArtifact@2
             inputs:
               buildType: 'current'
