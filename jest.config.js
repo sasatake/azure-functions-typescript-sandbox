@@ -9,4 +9,7 @@ module.exports = {
       tsConfig: "tsconfig.json",
     },
   },
+  moduleNameMapper: {
+    "^#/(.+)": "<rootDir>/$1",
+  },
 };
