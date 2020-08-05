@@ -9,6 +9,8 @@ trigger:
 variables:
   prefix: "$(Build.SourceBranchName)"
   archiveName: 'FunctionsArchive'
+  functionName: '$(prefix)-functions'
+  resourceGroupName: "$(prefix)-rg"
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -91,7 +93,7 @@ stages:
               scriptLocation: 'inlineScript'
               inlineScript: |
                 az functionapp deployment source config-zip --src ${1} --name ${2} --resource-group ${3}
-              arguments: "$(Build.BinariesDirectory)/$(Build.BuildId).zip $(prefix)-functions $(resourceGroupName)"
+              arguments: "$(Build.BinariesDirectory)/$(Build.BuildId).zip $(functionName) $(resourceGroupName)"
 
 
         
