@@ -29,15 +29,15 @@ stages:
         - task: Npm@1
           inputs:
             command: 'custom'
-            customCommand: 'npm run build'
+            customCommand: 'run build'
         - task: Npm@1
           inputs:
             command: 'custom'
-            customCommand: 'npm run test'
+            customCommand: 'run test'
         - task: Npm@1
           inputs:
             command: 'custom'
-            customCommand: 'npm prune --production'  
+            customCommand: 'prune --production'  
         - task: CopyFiles@2
           inputs:
             SourceFolder: "$(Build.SourcesDirectory)"
