@@ -33,7 +33,11 @@ stages:
         - task: Npm@1
           inputs:
             command: 'custom'
-            customCommand: 'run test'
+            customCommand: 'run test:ci'
+        - task: PublishCodeCoverageResults@1
+          inputs:
+            codeCoverageTool: 'cobertura'
+            summaryFileLocation: 'coverage/cobertura-coverage.xml'
         - task: Npm@1
           inputs:
             command: 'custom'

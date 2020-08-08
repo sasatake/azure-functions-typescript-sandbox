@@ -12,4 +12,5 @@ module.exports = {
   moduleNameMapper: {
     "^#/(.+)": "<rootDir>/$1",
   },
+  coverageReporters: ["html", "cobertura"],
 };
