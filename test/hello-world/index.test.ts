@@ -1,4 +1,4 @@
-import helloWorld from "#/hello-world/index";
+import helloWorld from "#/http-hello-world/index";
 import createContext from "#/test/lib/context";
 
 describe("test hello-world http trigger function with valid name.", () => {
