@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["post"],
+      "route": "user"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "cosmosdb",
+      "direction": "out",
+      "name": "user",
+      "databaseName": "%CosmosDB_DatabaseName%",
+      "collectionName": "User",
+      "connectionStringSetting": "CosmosDB_ConnectionString"
+    }
+  ],
+  "scriptFile": "./index.js"
+}

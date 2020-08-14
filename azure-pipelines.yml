@@ -48,9 +48,10 @@ stages:
             Contents: |
               host.json
               package.json
-              **/node_modules/**
+              node_modules/**
               **/**/function.json
               **/**/index.js
+              lib/**
             TargetFolder: '$(Build.ArtifactStagingDirectory)'
         - task: ArchiveFiles@2
           inputs:
