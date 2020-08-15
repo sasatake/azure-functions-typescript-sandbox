@@ -26,14 +26,17 @@ stages:
         - task: Npm@1
           inputs:
             command: 'install'
+          displayName: "npm install"
         - task: Npm@1
           inputs:
             command: 'custom'
             customCommand: 'run build'
+          displayName: "npm run build"
         - task: Npm@1
           inputs:
             command: 'custom'
             customCommand: 'run test:ci'
+          displayName: "npm run test"
         - task: PublishCodeCoverageResults@1
           inputs:
             codeCoverageTool: 'cobertura'
@@ -41,7 +44,8 @@ stages:
         - task: Npm@1
           inputs:
             command: 'custom'
-            customCommand: 'prune --production'  
+            customCommand: 'prune --production'
+          displayName: "npm clear cache"
         - task: CopyFiles@2
           inputs:
             SourceFolder: "$(Build.SourcesDirectory)"
@@ -51,7 +55,6 @@ stages:
               node_modules/**
               **/**/function.json
               **/**/index.js
-              lib/**
             TargetFolder: '$(Build.ArtifactStagingDirectory)'
         - task: ArchiveFiles@2
           inputs:
