@@ -22,6 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "file-type": "^14.7.1",
     "joi": "^17.2.0"
   }
 }
