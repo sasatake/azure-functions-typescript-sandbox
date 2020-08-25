@@ -1,0 +1,35 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["post"],
+      "route": "user/{id}/icon"
+    },
+    {
+      "type": "cosmosdb",
+      "direction": "in",
+      "name": "user",
+      "databaseName": "%CosmosDB_DatabaseName%",
+      "collectionName": "User",
+      "connectionStringSetting": "CosmosDB_ConnectionString",
+      "id": "{id}",
+      "partitionKey": "{id}"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "blob",
+      "direction": "out",
+      "name": "icon",
+      "path": "user-icons/tmp/{id}/{Datetime:yyyyMMddHHmmss}",
+      "connection": ""
+    }
+  ],
+  "scriptFile": "./index.js"
+}

@@ -15,4 +15,5 @@ export const httpUploadUserIcon = Joi.object({
   headers: Joi.object({
     "content-type": Joi.string().valid("application/octet-stream").required(),
   }).unknown(true),
+  fileType: Joi.string().valid("jpg", "png").required(),
 });
