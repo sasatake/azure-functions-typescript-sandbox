@@ -1,4 +1,4 @@
-const getJsonResponse = (status: Number, message: string) => {
+export const getJsonResponse = (status: Number, message: string) => {
   return {
     status,
     headers: { "Content-Type": "applicaion/json" },
@@ -7,5 +7,3 @@ const getJsonResponse = (status: Number, message: string) => {
     },
   };
 };
-
-export default getJsonResponse;
