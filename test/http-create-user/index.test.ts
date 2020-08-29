@@ -15,21 +15,16 @@ describe("when create-user http trigger function with valid body.", () => {
     body: validUser,
   };
   const context = createContext();
-  createUser(context, request);
 
-  test("should response 201 http status.", () => {
+  test("should response 201 http status.", async () => {
+    await createUser(context, request);
     expect(context.res.status).toEqual(201);
-  });
-
-  test("should response valid message.", () => {
     expect(context.res.body.message).toEqual("User Created.");
-  });
-
-  test("should response application/json content-type header.", () => {
     expect(context.res.headers["Content-Type"]).toEqual("applicaion/json");
   });
 
-  test("should set context bind user data.", () => {
+  test("should set context bind user data.", async () => {
+    await createUser(context, request);
     expect(context.bindings.user).toEqual(validUser);
   });
 });
@@ -42,23 +37,18 @@ describe("when create-user http trigger function with invalid content type.", ()
     body: validUser,
   };
   const context = createContext();
-  createUser(context, request);
 
-  test("should response 400 http status.", () => {
+  test("should response 400 http status.", async () => {
+    await createUser(context, request);
     expect(context.res.status).toEqual(400);
-  });
-
-  test("should response invalid message.", () => {
     expect(context.res.body.message).toEqual(
       '"headers.content-type" must be [application/json]'
     );
-  });
-
-  test("should response application/json content-type header.", () => {
     expect(context.res.headers["Content-Type"]).toEqual("applicaion/json");
   });
 
-  test("should not set context bind user data.", () => {
+  test("should not set context bind user data.", async () => {
+    await createUser(context, request);
     expect(context.bindings.user).toBeUndefined();
   });
 });
@@ -83,21 +73,16 @@ describe.each([
       body,
     };
     const context = createContext();
-    createUser(context, request);
 
-    test("should response 400 http status.", () => {
+    test("should response 400 http status.", async () => {
+      await createUser(context, request);
       expect(context.res.status).toEqual(400);
-    });
-
-    test("should response invalid message.", () => {
       expect(context.res.body.message).toEqual(expected);
-    });
-
-    test("should response application/json content-type header.", () => {
       expect(context.res.headers["Content-Type"]).toEqual("applicaion/json");
     });
 
-    test("should not set context bind user data.", () => {
+    test("should not set context bind user data.", async () => {
+      await createUser(context, request);
       expect(context.bindings.user).toBeUndefined();
     });
   }
